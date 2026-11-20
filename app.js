@@ -3,8 +3,8 @@
   Nunca coloques a chave secreta da OpenAI neste ficheiro.
 */
 const CONFIG = {
-  SUPABASE_URL: "COLOCA_AQUI_O_URL_DO_SUPABASE",
-  SUPABASE_ANON_KEY: "COLOCA_AQUI_A_CHAVE_PUBLICA_DO_SUPABASE",
+  SUPABASE_URL: "https://lssxdvcjvczwmdqhoyxg.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable__Q6TUtUdYQurKPNDSBix4Q_zFAapTQd",
   FUNCTION_NAME: "chat"
 };
 
