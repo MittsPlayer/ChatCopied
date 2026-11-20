@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#212121">
+  <title>ChatGPT [Copied]</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-top">
+        <div class="brand"><span class="brand-mark">✳</span><span>ChatGPT <small>[Copied]</small></span></div>
+        <button class="icon-btn mobile-close" id="closeSidebar" aria-label="Fechar menu">✕</button>
+      </div>
+      <button class="new-chat" id="newChat"><span>＋</span> Nova conversa</button>
+      <div class="history-heading">As tuas conversas</div>
+      <nav id="chatList" class="chat-list" aria-label="Histórico de conversas"></nav>
+      <div class="sidebar-bottom">
+        <div class="profile-dot">C</div>
+        <div><strong>ChatGPT [Copied]</strong><small>Versão pessoal</small></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="openSidebar" aria-label="Abrir menu">☰</button>
+        <div class="model-label">ChatGPT [Copied] <span>⌄</span></div>
+        <button class="icon-btn" id="clearChat" title="Limpar conversa" aria-label="Limpar conversa">＋</button>
+      </header>
+
+      <section class="conversation" id="conversation">
+        <div class="welcome" id="welcome">
+          <div class="welcome-logo">✳</div>
+          <h1>Em que posso ajudar?</h1>
+          <p>Uma versão pessoal, criada por ti.</p>
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="Ajuda-me a aprender JavaScript."><b>⌘</b><span>Aprender programação<small>Explica-me um conceito</small></span></button>
+            <button class="suggestion" data-prompt="Dá-me ideias para um projeto HTML original."><b>✧</b><span>Criar um projeto<small>Transforma uma ideia em plano</small></span></button>
+            <button class="suggestion" data-prompt="Ajuda-me a organizar as minhas tarefas de hoje."><b>☷</b><span>Organizar ideias<small>Faz um plano simples</small></span></button>
+            <button class="suggestion" data-prompt="Explica-me como funciona a inteligência artificial."><b>◎</b><span>Explorar IA<small>Aprender algo novo</small></span></button>
+          </div>
+        </div>
+        <div class="messages" id="messages" aria-live="polite"></div>
+      </section>
+
+      <footer class="composer-wrap">
+        <form class="composer" id="chatForm">
+          <textarea id="messageInput" rows="1" maxlength="8000" placeholder="Envia uma mensagem..." aria-label="Mensagem"></textarea>
+          <button class="send-btn" id="sendBtn" type="submit" aria-label="Enviar mensagem">↑</button>
+        </form>
+        <p class="disclaimer">O ChatGPT [Copied] pode cometer erros. Confirma informações importantes.</p>
+      </footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
