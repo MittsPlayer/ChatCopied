@@ -3,7 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#212121">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.json">
   <title>ChatGPT [Copied]</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -11,7 +14,7 @@
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="side-top">
-        <div class="brand"><span class="brand-mark">✳</span><span>ChatGPT <small>[Copied]</small></span></div>
+        <div class="brand"><img class="brand-mark" src="./icon-192.png" alt="Copied"><span>ChatGPT <small>[Copied]</small></span></div>
         <button class="icon-btn mobile-close" id="closeSidebar" aria-label="Fechar menu">✕</button>
       </div>
       <button class="new-chat" id="newChat"><span>＋</span> Nova conversa</button>
@@ -38,7 +41,7 @@
 
       <section class="conversation" id="conversation">
         <div class="welcome" id="welcome">
-          <div class="welcome-logo">✳</div>
+          <img class="welcome-logo" src="./icon-512.png" alt="Copied">
           <h1>Em que posso ajudar?</h1>
           <p>Uma versão pessoal, criada por ti.</p>
           <div class="suggestions">
