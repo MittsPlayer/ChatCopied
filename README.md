@@ -34,3 +34,16 @@ O navegador gera um UUID aleatório e usa-o como identificador de histórico. N�
 
 ## Gratuito
 Não foi configurado qualquer serviço pago nem login. Os planos gratuitos da Groq e do Supabase têm quotas e limites, não utilização ilimitada. `GROQ_API_KEY` já estava configurada no projecto; não a coloques no GitHub, no HTML ou no JavaScript.
+
+
+## Fornecedores e modelos de IA
+
+O selector permite escolher modelos servidos pela Groq ou pela NVIDIA NIM. A chave `GROQ_API_KEY` e a chave `NVIDIA_API_KEY` devem ficar exclusivamente nos Secrets da Supabase Edge Function `chat`; nunca as coloques no frontend ou no repositório GitHub.
+
+Modelos NVIDIA actualmente incluídos no selector (catálogo Free Endpoint consultado em 21-11-2026):
+- `nvidia/nemotron-3.5-bolt-e4b`
+- `nvidia/nemotron-3.5-super-vl-120b-a12b`
+- `z-ai/glm-5.3`
+- `z-ai/glm-5.3-flash`
+
+A lista é uma selecção inicial verificada, não um catálogo automaticamente sincronizado. A NVIDIA não fornece no endpoint geral `/v1/models` uma indicação fiável de quais os modelos com Free Endpoint e compatíveis com chat; por isso, a lista deve ser revista quando o catálogo mudar. Os limites de utilização gratuita podem variar.

@@ -5,9 +5,14 @@ const CONFIG = {
   FUNCTION_NAME: "chat"
 };
 const MODELS = {
-  "openai/gpt-oss-120b": "GPT-OSS 120B",
-  "qwen/qwen3.8-27b": "Qwen 3.8 27B"
+  "groq::openai/gpt-oss-120b": "GPT-OSS 120B (Groq)",
+  "groq::qwen/qwen3.8-27b": "Qwen 3.8 27B (Groq)",
+  "nvidia::nvidia/nemotron-3.5-bolt-e4b": "Nemotron 3.5 Bolt E4B (NVIDIA)",
+  "nvidia::nvidia/nemotron-3.5-super-vl-120b-a12b": "Nemotron 3.5 Super VL 120B (NVIDIA)",
+  "nvidia::z-ai/glm-5.3": "GLM-5.3 (NVIDIA)",
+  "nvidia::z-ai/glm-5.3-flash": "GLM-5.3 Flash (NVIDIA)"
 };
+const DEFAULT_MODEL = "groq::openai/gpt-oss-120b";
 const $ = (s) => document.querySelector(s);
 const STORAGE_KEY = "chatgpt-copied-chats-v2";
 const OWNER_KEY = "chatgpt-copied-browser-id-v1";
@@ -31,7 +36,8 @@ function render(){
   (chat?.messages||[]).forEach(m=>{const el=document.createElement('article');el.className='message '+m.role;const avatar=document.createElement('div');avatar.className='avatar';avatar.textContent=m.role==='user'?'C':'✳';const body=document.createElement('div');body.className='message-body';body.innerHTML=renderText(m.content);el.append(avatar,body);messages.appendChild(el)});
   if(busy){const el=document.createElement('div');el.className='message assistant';el.innerHTML='<div class="avatar">✳</div><div class="message-body typing">A pensar…</div>';messages.appendChild(el)}
   $('#conversation').scrollTop=$('#conversation').scrollHeight;
-  $('#modelSelect').value=localStorage.getItem('chatgpt-copied-model')||'openai/gpt-oss-120b';
+  const savedModel=localStorage.getItem('chatgpt-copied-model')||DEFAULT_MODEL;
+  $('#modelSelect').value=MODELS[savedModel]?savedModel:DEFAULT_MODEL;
 }
 function toast(message){const t=$('#toast');t.textContent=message;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
 function closeSidebar(){$('#sidebar').classList.remove('open')}
@@ -43,10 +49,10 @@ async function syncSave(chat){try{await api({action:'save',conversation:{id:chat
 async function syncDelete(id){try{await api({action:'delete',conversationId:id})}catch(e){toast('Não foi possível apagar no servidor: '+e.message)}}
 async function deleteChat(id){chats=chats.filter(c=>c.id!==id);if(activeId===id)activeId=chats[0]?.id||null;saveLocal();render();await syncDelete(id)}
 async function loadCloudHistory(){try{const data=await api({action:'load'});const cloud=Array.isArray(data.conversations)?data.conversations:[];const map=new Map(chats.map(c=>[c.id,c]));for(const c of cloud){const old=map.get(c.id);if(!old||Number(c.updatedAt)>Number(old.updatedAt))map.set(c.id,c)}chats=[...map.values()].sort((a,b)=>Number(b.updatedAt)-Number(a.updatedAt));if(!activeId||!chats.some(c=>c.id===activeId))activeId=chats[0]?.id||null;saveLocal();render()}catch(e){console.warn('Histórico online indisponível:',e.message);toast('Histórico online indisponível. A usar cópia local.')}}
-async function askAI(messages,model){return api({action:'chat',messages,model})}
+async function askAI(messages,provider,model){return api({action:'chat',messages,provider,model})}
 async function sendMessage(text){
   text=text.trim();if(!text||busy)return;if(!currentChat())newChat();const chat=currentChat();chat.messages.push({role:'user',content:text});if(chat.messages.length===1)chat.title=text.slice(0,38)+(text.length>38?'…':'');chat.updatedAt=Date.now();saveLocal();$('#messageInput').value='';autoResize();busy=true;$('#sendBtn').disabled=true;render();
-  try{const model=$('#modelSelect').value;const result=await askAI(chat.messages.slice(-20),model);chat.messages.push({role:'assistant',content:result.reply});lastUsage=result.usage||null;$('#usageInfo').textContent=lastUsage?`Tokens desta chamada: ${lastUsage.prompt_tokens??'?'} entrada + ${lastUsage.completion_tokens??'?'} saída = ${lastUsage.total_tokens??'?'} total`:'Tokens desta chamada: indisponível';}
+  try{const selected=$('#modelSelect').value;const [provider,model]=selected.split('::');const result=await askAI(chat.messages.slice(-20),provider,model);chat.messages.push({role:'assistant',content:result.reply});lastUsage=result.usage||null;$('#usageInfo').textContent=lastUsage?`Tokens desta chamada: ${lastUsage.prompt_tokens??'?'} entrada + ${lastUsage.completion_tokens??'?'} saída = ${lastUsage.total_tokens??'?'} total`:'Tokens desta chamada: indisponível';}
   catch(err){chat.messages.push({role:'assistant',content:`Não consegui responder: ${err.message}`});}
   finally{busy=false;$('#sendBtn').disabled=false;chat.updatedAt=Date.now();saveLocal();render();syncSave(chat)}
 }
@@ -57,6 +63,6 @@ $('#messageInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKe
 $('#newChat').onclick=newChat;
 $('#clearChat').onclick=()=>{if(currentChat()){const c=currentChat();c.messages=[];c.title='Nova conversa';c.updatedAt=Date.now();saveLocal();render();syncSave(c)}else newChat()};
 $('#openSidebar').onclick=()=>$('#sidebar').classList.add('open');$('#closeSidebar').onclick=closeSidebar;
-$('#modelSelect').addEventListener('change',e=>{localStorage.setItem('chatgpt-copied-model',e.target.value);toast('Modelo selecionado: '+MODELS[e.target.value])});
+$('#modelSelect').addEventListener('change',e=>{localStorage.setItem('chatgpt-copied-model',e.target.value);toast('Modelo selecionado: '+(MODELS[e.target.value]||'Modelo'))});
 document.querySelectorAll('.suggestion').forEach(b=>b.addEventListener('click',()=>sendMessage(b.dataset.prompt)));
 render();loadCloudHistory();
