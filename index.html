@@ -26,7 +26,13 @@
     <main class="main">
       <header class="topbar">
         <button class="icon-btn menu-btn" id="openSidebar" aria-label="Abrir menu">☰</button>
-        <div class="model-label">ChatGPT [Copied] <span>⌄</span></div>
+        <div class="topbar-center">
+          <div class="model-label">ChatGPT [Copied]</div>
+          <select id="modelSelect" class="model-select" aria-label="Escolher modelo">
+            <option value="openai/gpt-oss-120b">GPT-OSS 120B</option>
+            <option value="qwen/qwen3.8-27b">Qwen 3.8 27B</option>
+          </select>
+        </div>
         <button class="icon-btn" id="clearChat" title="Limpar conversa" aria-label="Limpar conversa">＋</button>
       </header>
 
@@ -50,6 +56,7 @@
           <textarea id="messageInput" rows="1" maxlength="8000" placeholder="Envia uma mensagem..." aria-label="Mensagem"></textarea>
           <button class="send-btn" id="sendBtn" type="submit" aria-label="Enviar mensagem">↑</button>
         </form>
+        <p class="usage" id="usageInfo">Tokens da última resposta: —</p>
         <p class="disclaimer">O ChatGPT [Copied] pode cometer erros. Confirma informações importantes.</p>
       </footer>
     </main>
